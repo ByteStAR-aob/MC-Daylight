@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MC-Daylight Packets</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0e1116; --card: #161b22; --accent: #4da3ff; --accent-soft: rgba(77,163,255,0.15);
+      --text: #e6edf3; --muted: #9da7b3; --danger: #ff6b6b; --success: #2ea043;
+      --radius: 14px; --border: rgba(255,255,255,0.1);
+    }
+    * { box-sizing: border-box; touch-action: manipulation; }
+    body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); }
+    .app { max-width: 480px; margin: 0 auto; padding: 16px 14px 180px; }
+
+    /* UI ELEMENTS */
+    .header-v2 { background: var(--card); border-radius: var(--radius); overflow: hidden; margin-bottom: 16px; border: 1px solid var(--border); }
+    .brand-bar { background: #1f6feb; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 800; font-size: 14px; }
+    .clear-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 5px 12px; border-radius: 6px; font-size: 11px; cursor: pointer; }
+    .header-content { padding: 16px; }
+    .field-label { display: block; font-size: 10px; font-weight: 800; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; }
+
+    input, textarea { width: 100%; background: var(--accent-soft); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 10px; font-size: 15px; outline: none; margin-bottom: 10px; }
+    
+    .card { background: var(--card); border-radius: var(--radius); padding: 14px; margin-bottom: 14px; border: 1px solid var(--border); }
+    .card h2 { font-size: 11px; margin: 0 0 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    .checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+    label.check-item { display: flex; align-items: center; gap: 10px; font-size: 14px; background: var(--accent-soft); padding: 12px; border-radius: 10px; }
+    input[type="checkbox"] { accent-color: var(--accent); transform: scale(1.2); width: auto; margin: 0; }
+
+    .photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .photo-box { background: var(--accent-soft); border-radius: 10px; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; color: var(--muted); border: 1px dashed var(--muted); position: relative; overflow: hidden; }
+    .photo-box img { width: 100%; height: 100%; object-fit: cover; }
+    .remove-photo { position: absolute; top: 4px; right: 4px; background: var(--danger); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; }
+
+    /* FOOTER CONTROLS */
+    .footer { position: fixed; bottom: 0; left: 0; right: 0; padding: 14px; background: linear-gradient(180deg, transparent, var(--bg) 40%); z-index: 100; display: flex; gap: 8px; }
+    .generate { flex: 2; padding: 18px; border-radius: 18px; border: none; background: linear-gradient(135deg, #1f6feb, #4da3ff); color: white; font-size: 16px; font-weight: bold; }
+    .share-btn { flex: 1; padding: 18px; border-radius: 18px; border: 1px solid var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: bold; }
+
+    /* PREVIEW & STATUS */
+    #statusAlert { display: none; background: var(--accent-soft); color: var(--accent); padding: 10px; border-radius: 8px; font-size: 12px; text-align: center; margin-bottom: 10px; border: 1px solid var(--accent); }
+    #reportPreview { background: white; color: #333; border-radius: var(--radius); padding: 20px; margin-top: 20px; border: 2px solid var(--accent); display: none; }
+    .btn-download { background: var(--success); color: white; border: none; padding: 14px; width: 100%; border-radius: 10px; font-weight: bold; margin-top: 15px; }
+    
+    .signature-font { font-family: 'Dancing Script', cursive; font-size: 26px; border: none; border-bottom: 1px solid var(--accent); background: transparent; color: var(--text); text-align: center; }
+  </style>
+</head>
+<body>
+
+  <div class="app">
+    <div class="header-v2">
+      <div class="brand-bar">
+        <span>MC-Daylight Packets</span>
+        <button class="clear-btn" onclick="clearForm()">✕ Clear</button>
+      </div>
+      <div class="header-content">
+        <label class="field-label">COMPANY NAME</label>
+        <input type="text" id="companyName" placeholder="Enter Company Name">
+        
+        <label class="field-label">JOB LOCATION / ID</label>
+        <input type="text" id="jobLocation" placeholder="Address or Job Number">
+        
+        <label class="field-label">DATE OF WORK</label>
+        <input type="date" id="workDate">
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>TODAY'S WORK</h2>
+      <div class="checklist">
+        <label class="check-item"><input type="checkbox" data-work="sawcut"> Sawcut</label>
+        <label class="check-item"><input type="checkbox" data-work="jackhammer"> Jackhammer</label>
+        <label class="check-item"><input type="checkbox" data-work="excavation"> Excavation</label>
+        <label class="check-item"><input type="checkbox" data-work="utilities"> Utilities</label>
+        <label class="check-item"><input type="checkbox" data-work="backfill"> Backfill</label>
+        <label class="check-item"><input type="checkbox" data-work="temp-patch"> Temp Patch</label>
+      </div>
+      <textarea id="workNotes" placeholder="Work detail notes…"></textarea>
+    </div>
+
+    <div class="card">
+      <h2>ISSUES / DELAYS</h2>
+      <div class="checklist">
+        <label class="check-item"><input type="checkbox" data-issue="equipment"> Equipment</label>
+        <label class="check-item"><input type="checkbox" data-issue="weather"> Weather</label>
+        <label class="check-item"><input type="checkbox" data-issue="utility"> Conflict</label>
+        <label class="check-item"><input type="checkbox" data-issue="traffic"> Traffic</label>
+      </div>
+      <textarea id="issueDetails" placeholder="Details about issues/delays…"></textarea>
+    </div>
+
+    <div class="card">
+      <h2>PHOTOS</h2>
+      <input id="photoInput" type="file" accept="image/*" multiple style="display:none" />
+      <div class="photos" id="photoGrid">
+        <div class="photo-box" id="addPhoto" onclick="document.getElementById('photoInput').click()">＋</div>
+      </div>
+    </div>
+
+    <div class="card">
+        <h2>NOTES TO SUPERVISOR</h2>
+        <textarea id="supervisorNotes" placeholder="Message to management…"></textarea>
+    </div>
+
+    <div class="card">
+        <h2>TIME & AUTHORIZATION</h2>
+        <div style="display:flex; gap:8px; margin-bottom:20px;">
+            <div style="flex:1"><label class="field-label">Start</label><input type="time" id="startTime"></div>
+            <div style="flex:1"><label class="field-label">End</label><input type="time" id="endTime"></div>
+            <div style="flex:1"><label class="field-label">Lunch</label><input type="number" id="lunchTime" placeholder="min"></div>
+        </div>
+        <label class="field-label">FOREMAN SIGNATURE (TYPE NAME)</label>
+        <input type="text" id="typedSig" class="signature-font" placeholder="John Doe">
+    </div>
+
+    <div style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px; text-align: center;">
+        <a href="https://www.bluecomet.work" target="_blank" style="text-decoration: none; display: block;">
+            <p style="color: var(--muted); font-size: 0.75rem; margin: 0; letter-spacing: 1.5px; text-transform: uppercase;">
+                A <span style="color: var(--accent); font-weight: bold; border-bottom: 1px solid var(--accent);">BLUECOMET.WORK</span> SOLUTION
+            </p>
+        </a>
+    </div>
+
+    <div id="statusAlert">
+      <strong>Packet Prepared</strong><br>Use "Share File" to send the document.
+    </div>
+    <div id="reportPreview"></div>
+  </div>
+
+  <div class="footer">
+    <button class="share-btn" onclick="shareAsBlob()">Share File</button>
+    <button class="generate" onclick="generatePacket()">Generate</button>
+  </div>
+
+  <script>
+    let uploadedPhotos = [];
+
+    window.onload = () => {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('workDate').value = today;
+        loadSavedData();
+    };
+
+    function formatTime(timeStr) {
+        if (!timeStr) return "N/A";
+        const [hh, mm] = timeStr.split(':');
+        const h = parseInt(hh);
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        const h12 = h % 12 || 12;
+        return `${h12}:${mm} ${ampm}`;
+    }
+
+    document.getElementById('photoInput').onchange = (e) => {
+      Array.from(e.target.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          uploadedPhotos.push(event.target.result);
+          const wrapper = document.createElement('div');
+          wrapper.className = 'photo-box';
+          wrapper.innerHTML = `<img src="${event.target.result}"><button class="remove-photo" onclick="removePhoto('${event.target.result}', this)">✕</button>`;
+          document.getElementById('photoGrid').insertBefore(wrapper, document.getElementById('addPhoto'));
+        };
+        reader.readAsDataURL(file);
+      });
+    };
+    function removePhoto(src, btn) { uploadedPhotos = uploadedPhotos.filter(p => p !== src); btn.parentElement.remove(); }
+
+    function clearForm() { if(confirm("Wipe form?")) { localStorage.removeItem('mc_daylight_draft'); location.reload(); } }
+
+    function generatePacketHTML() {
+        const company = document.getElementById('companyName').value || "Field Operations";
+        const job = document.getElementById('jobLocation').value || "Job Report";
+        const date = document.getElementById('workDate').value;
+        const work = Array.from(document.querySelectorAll('[data-work]:checked')).map(el => el.parentElement.innerText.trim());
+        const issues = Array.from(document.querySelectorAll('[data-issue]:checked')).map(el => el.parentElement.innerText.trim());
+        const photos = uploadedPhotos.map(p => `<img src="${p}" style="width:140px; height:140px; object-fit:cover; margin:5px; border-radius:5px; border:1px solid #eee;">`).join('');
+
+        return `
+            <div id="printArea" style="background:white; padding:10px;">
+                <div style="border-bottom:3px solid #0969da; margin-bottom:15px; padding-bottom:5px;">
+                  <h2 style="margin:0; color:#0969da; text-transform:uppercase;">${company}</h2>
+                  <p style="margin:0; font-size:12px; color:#555;">MC-Daylight Field Report</p>
+                </div>
+                <p><strong>Job Site:</strong> ${job}<br><strong>Date:</strong> ${date}</p>
+                <p><strong>Work Performed:</strong> ${work.join(', ') || 'None'}</p>
+                <p><strong>Work Notes:</strong> ${document.getElementById('workNotes').value || 'N/A'}</p>
+                <p><strong>Issues/Delays:</strong> ${issues.join(', ') || 'None'}</p>
+                <p><strong>Issue Details:</strong> ${document.getElementById('issueDetails').value || 'N/A'}</p>
+                <p><strong>Message to Supervisor:</strong> ${document.getElementById('supervisorNotes').value || 'N/A'}</p>
+                <p><strong>Shift Log:</strong> ${formatTime(document.getElementById('startTime').value)} - ${formatTime(document.getElementById('endTime').value)} (${document.getElementById('lunchTime').value || 0}m lunch)</p>
+                <div style="display:flex; flex-wrap:wrap; margin:15px 0;">${photos}</div>
+                <div style="margin-top:20px; border-top:1px solid #333; display:inline-block; padding: 5px 40px 0 0;">
+                    <span style="font-family:'Dancing Script', cursive; font-size:28px;">${document.getElementById('typedSig').value || '---'}</span><br>
+                    <small style="text-transform:uppercase; color:#888; font-size:10px;">Authorized Signature</small>
+                </div>
+                <div style="text-align:center; font-size:9px; color:#ccc; margin-top:40px;">A BLUECOMET.WORK SOLUTION</div>
+            </div>`;
+    }
+
+    function generatePacket() {
+        const preview = document.getElementById('reportPreview');
+        const alertBox = document.getElementById('statusAlert');
+        alertBox.style.display = 'block';
+        preview.style.display = 'block';
+        preview.innerHTML = generatePacketHTML() + `<button class="btn-download" onclick="downloadReport()">💾 Download Official File</button>`;
+        preview.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function downloadReport() {
+        const job = document.getElementById('jobLocation').value || "Report";
+        const content = generatePacketHTML();
+        const template = `<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet"><style>body{font-family:sans-serif;padding:40px;max-width:800px;margin:auto;line-height:1.5;color:#222;}img{max-width:100%; border:1px solid #eee;}</style></head><body>${content}</body></html>`;
+        const blob = new Blob([template], { type: 'text/html' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `MC_Report_${job.replace(/\s+/g, '_')}.html`;
+        link.click();
+    }
+
+    async function shareAsBlob() {
+        const job = document.getElementById('jobLocation').value || "MC_Report";
+        const content = generatePacketHTML();
+        const template = `<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet"><style>body{font-family:sans-serif;padding:40px;max-width:800px;margin:auto;line-height:1.5;color:#222;}img{max-width:100%; border:1px solid #eee;}</style></head><body>${content}</body></html>`;
+        const blob = new Blob([template], { type: 'text/html' });
+        const file = new File([blob], `MC_Report_${job.replace(/\s+/g, '_')}.html`, { type: 'text/html' });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], title: 'Field Report' });
+        } else {
+            downloadReport();
+        }
+    }
+
+    function saveData() {
+        const data = {
+            companyName: document.getElementById('companyName').value,
+            jobLocation: document.getElementById('jobLocation').value,
+            workDate: document.getElementById('workDate').value,
+            workNotes: document.getElementById('workNotes').value,
+            issueDetails: document.getElementById('issueDetails').value,
+            supervisorNotes: document.getElementById('supervisorNotes').value,
+            typedSig: document.getElementById('typedSig').value,
+            startTime: document.getElementById('startTime').value,
+            endTime: document.getElementById('endTime').value,
+            lunchTime: document.getElementById('lunchTime').value,
+            wCB: Array.from(document.querySelectorAll('[data-work]')).map(cb => cb.checked),
+            iCB: Array.from(document.querySelectorAll('[data-issue]')).map(cb => cb.checked)
+        };
+        localStorage.setItem('mc_daylight_draft', JSON.stringify(data));
+    }
+
+    function loadSavedData() {
+        const saved = JSON.parse(localStorage.getItem('mc_daylight_draft'));
+        if (!saved) return;
+        document.getElementById('companyName').value = saved.companyName || '';
+        document.getElementById('jobLocation').value = saved.jobLocation || '';
+        document.getElementById('workDate').value = saved.workDate || '';
+        document.getElementById('workNotes').value = saved.workNotes || '';
+        document.getElementById('issueDetails').value = saved.issueDetails || '';
+        document.getElementById('supervisorNotes').value = saved.supervisorNotes || '';
+        document.getElementById('typedSig').value = saved.typedSig || '';
+        document.getElementById('startTime').value = saved.startTime || '';
+        document.getElementById('endTime').value = saved.endTime || '';
+        document.getElementById('lunchTime').value = saved.lunchTime || '';
+        const wCBs = document.querySelectorAll('[data-work]');
+        saved.wCB?.forEach((c, i) => { if(wCBs[i]) wCBs[i].checked = c; });
+        const iCBs = document.querySelectorAll('[data-issue]');
+        saved.iCB?.forEach((c, i) => { if(iCBs[i]) iCBs[i].checked = c; });
+    }
+    document.addEventListener('input', saveData);
+  </script>
+</body>
+</html>
