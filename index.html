@@ -12,23 +12,10 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="MC-Daylight" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="application-name" content="MC-Daylight" />
-  <meta name="msapplication-TileColor" content="#1f6feb" />
-  <meta name="msapplication-TileImage" content="icons/icon-144x144.png" />
-
-  <!-- Apple Touch Icons (required for iOS home screen) -->
   <link rel="apple-touch-icon" href="icons/icon-152x152.png" />
-  <link rel="apple-touch-icon" sizes="72x72"   href="icons/icon-72x72.png" />
-  <link rel="apple-touch-icon" sizes="96x96"   href="icons/icon-96x96.png" />
-  <link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128x128.png" />
-  <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png" />
-  <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png" />
   <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png" />
   <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png" />
-
-  <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png" />
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512x512.png" />
 
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
 
@@ -37,6 +24,7 @@
       --bg: #0e1116; --card: #161b22; --accent: #4da3ff; --accent-soft: rgba(77,163,255,0.15);
       --text: #e6edf3; --muted: #9da7b3; --danger: #ff6b6b; --success: #2ea043;
       --radius: 14px; --border: rgba(255,255,255,0.1);
+      --mat-accent: #00d2ff; --mat-gold: #ffce00; --mat-purple: #9d50bb;
     }
     * { box-sizing: border-box; touch-action: manipulation; }
     body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); }
@@ -44,70 +32,31 @@
 
     /* ── INSTALL BANNER ── */
     #installBanner {
-      display: none;
-      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
-      background: linear-gradient(135deg, #1f6feb, #0550ae);
-      color: white; padding: 12px 16px;
-      box-shadow: 0 4px 20px rgba(31,111,235,0.5);
-      animation: slideDown 0.35s ease;
+      display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+      background: linear-gradient(135deg, #1f6feb, #0550ae); color: white; padding: 12px 16px;
+      box-shadow: 0 4px 20px rgba(31,111,235,0.5); animation: slideDown 0.35s ease;
     }
     @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
-    #installBanner .banner-inner {
-      max-width: 480px; margin: 0 auto;
-      display: flex; align-items: center; gap: 12px;
-    }
-    #installBanner .banner-icon {
-      width: 42px; height: 42px; border-radius: 10px;
-      background: rgba(255,255,255,0.15);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; flex-shrink: 0;
-    }
+    #installBanner .banner-inner { max-width: 480px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+    #installBanner .banner-icon { width: 42px; height: 42px; border-radius: 10px; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
     #installBanner .banner-text { flex: 1; }
     #installBanner .banner-text strong { display: block; font-size: 13px; font-weight: 800; }
     #installBanner .banner-text span { font-size: 11px; opacity: 0.85; }
     #installBanner .banner-actions { display: flex; gap: 8px; flex-shrink: 0; }
-    #installBanner .btn-install {
-      background: white; color: #1f6feb; border: none;
-      padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer;
-    }
-    #installBanner .btn-dismiss {
-      background: rgba(255,255,255,0.2); color: white; border: none;
-      padding: 8px 12px; border-radius: 8px; font-size: 12px; cursor: pointer;
-    }
+    #installBanner .btn-install { background: white; color: #1f6feb; border: none; padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; }
+    #installBanner .btn-dismiss { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; }
+    #iosHint { display: none; position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: #1f6feb; color: white; border-radius: 12px; padding: 12px 18px; font-size: 13px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.4); text-align: center; max-width: 280px; z-index: 9999; pointer-events: none; }
+    #iosHint::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 8px solid #1f6feb; }
+    #pwaIndicator { display: none; position: fixed; top: 10px; right: 10px; z-index: 200; background: var(--success); color: white; font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 6px; }
 
-    /* ── iOS INSTALL TOOLTIP ── */
-    #iosHint {
-      display: none;
-      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
-      background: #1f6feb; color: white; border-radius: 12px;
-      padding: 12px 18px; font-size: 13px; font-weight: 600;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-      text-align: center; max-width: 280px; z-index: 9999;
-      animation: fadeIn 0.3s ease;
-      pointer-events: none;
-    }
-    #iosHint::after {
-      content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
-      border-left: 8px solid transparent; border-right: 8px solid transparent;
-      border-top: 8px solid #1f6feb;
-    }
-    @keyframes fadeIn { from { opacity:0; transform: translateX(-50%) translateY(8px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
-
-    /* ── INSTALL INDICATOR (top-right when already installed) ── */
-    #pwaIndicator {
-      display: none; position: fixed; top: 10px; right: 10px; z-index: 200;
-      background: var(--success); color: white; font-size: 10px; font-weight: 800;
-      padding: 4px 8px; border-radius: 6px; letter-spacing: 0.5px;
-    }
-
-    /* ── UI ELEMENTS (unchanged from original) ── */
+    /* ── CORE UI ── */
     .header-v2 { background: var(--card); border-radius: var(--radius); overflow: hidden; margin-bottom: 16px; border: 1px solid var(--border); }
     .brand-bar { background: #1f6feb; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 800; font-size: 14px; }
     .clear-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 5px 12px; border-radius: 6px; font-size: 11px; cursor: pointer; }
     .header-content { padding: 16px; }
     .field-label { display: block; font-size: 10px; font-weight: 800; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; }
-
-    input, textarea { width: 100%; background: var(--accent-soft); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 10px; font-size: 15px; outline: none; margin-bottom: 10px; }
+    input, textarea, select { width: 100%; background: var(--accent-soft); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 10px; font-size: 15px; outline: none; margin-bottom: 10px; }
+    select option { background: #1c1c21; }
 
     .card { background: var(--card); border-radius: var(--radius); padding: 14px; margin-bottom: 14px; border: 1px solid var(--border); }
     .card h2 { font-size: 11px; margin: 0 0 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
@@ -119,22 +68,73 @@
     .photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .photo-box { background: var(--accent-soft); border-radius: 10px; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; color: var(--muted); border: 1px dashed var(--muted); position: relative; overflow: hidden; }
     .photo-box img { width: 100%; height: 100%; object-fit: cover; }
-    .remove-photo { position: absolute; top: 4px; right: 4px; background: var(--danger); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; }
+    .remove-photo { position: absolute; top: 4px; right: 4px; background: var(--danger); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; cursor: pointer; }
 
     .footer { position: fixed; bottom: 0; left: 0; right: 0; padding: 14px; background: linear-gradient(180deg, transparent, var(--bg) 40%); z-index: 100; display: flex; gap: 8px; }
-    .generate { flex: 2; padding: 18px; border-radius: 18px; border: none; background: linear-gradient(135deg, #1f6feb, #4da3ff); color: white; font-size: 16px; font-weight: bold; }
-    .share-btn { flex: 1; padding: 18px; border-radius: 18px; border: 1px solid var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: bold; }
+    .generate { flex: 2; padding: 18px; border-radius: 18px; border: none; background: linear-gradient(135deg, #1f6feb, #4da3ff); color: white; font-size: 16px; font-weight: bold; cursor: pointer; }
+    .share-btn { flex: 1; padding: 18px; border-radius: 18px; border: 1px solid var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: bold; cursor: pointer; }
 
     #statusAlert { display: none; background: var(--accent-soft); color: var(--accent); padding: 10px; border-radius: 8px; font-size: 12px; text-align: center; margin-bottom: 10px; border: 1px solid var(--accent); }
     #reportPreview { background: white; color: #333; border-radius: var(--radius); padding: 20px; margin-top: 20px; border: 2px solid var(--accent); display: none; }
-    .btn-download { background: var(--success); color: white; border: none; padding: 14px; width: 100%; border-radius: 10px; font-weight: bold; margin-top: 15px; }
-
+    .btn-download { background: var(--success); color: white; border: none; padding: 14px; width: 100%; border-radius: 10px; font-weight: bold; margin-top: 15px; cursor: pointer; }
     .signature-font { font-family: 'Dancing Script', cursive; font-size: 26px; border: none; border-bottom: 1px solid var(--accent); background: transparent; color: var(--text); text-align: center; }
+
+    /* ── MATERIALS CARD ── */
+    .mat-toggle { display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; margin: 0; }
+    .mat-toggle h2 { margin: 0; }
+    .mat-toggle-right { display: flex; align-items: center; gap: 8px; }
+    .mat-badge { background: linear-gradient(to right, var(--mat-accent), var(--mat-purple)); color: #000; font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 20px; letter-spacing: 0.5px; }
+    .mat-chevron { color: var(--muted); font-size: 14px; transition: transform 0.25s; display: inline-block; }
+    .mat-chevron.open { transform: rotate(180deg); }
+
+    .mat-body { display: none; margin-top: 14px; border-top: 1px solid var(--border); padding-top: 14px; }
+    .mat-body.open { display: block; }
+
+    .mat-row { display: flex; gap: 8px; }
+    .mat-row > div { flex: 1; }
+
+    .mat-result-box {
+      background: linear-gradient(145deg, #0d1f33, #161b22);
+      border: 1px solid var(--mat-accent); border-radius: 12px;
+      padding: 12px 14px; margin: 8px 0; display: flex; align-items: center; justify-content: space-between;
+    }
+    .mat-tons { font-size: 2rem; font-weight: 900; color: var(--mat-accent); line-height: 1; }
+    .mat-tons-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+    .mat-yards { font-size: 1rem; font-weight: 700; color: var(--mat-gold); }
+
+    .mat-bags { background: rgba(255,206,0,0.08); border: 1px solid rgba(255,206,0,0.25); border-radius: 10px; padding: 10px 12px; margin: 6px 0; display: none; }
+    .mat-bag-row { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .mat-bag-row:last-child { border: none; }
+    .mat-bag-row strong { color: var(--mat-gold); }
+
+    .preset-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+    .preset-btn { background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--muted); padding: 9px 8px; border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 600; transition: all 0.15s; }
+    .preset-btn.active { background: var(--mat-accent); color: #000; border-color: var(--mat-accent); font-weight: 800; }
+
+    /* ── MATERIAL LOG ── */
+    .mat-log { margin-top: 12px; }
+    .mat-log-title { font-size: 10px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .mat-entry {
+      background: rgba(0,210,255,0.07); border: 1px solid rgba(0,210,255,0.2);
+      border-radius: 10px; padding: 10px 12px; margin-bottom: 8px;
+      font-size: 13px; line-height: 1.7;
+    }
+    .mat-entry-actions { display: flex; gap: 6px; margin-top: 8px; }
+    .mat-copy-btn { flex: 1; background: rgba(0,210,255,0.15); border: 1px solid rgba(0,210,255,0.3); color: var(--mat-accent); padding: 7px; border-radius: 7px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .mat-copy-btn.copied { background: rgba(46,160,67,0.2); border-color: var(--success); color: var(--success); }
+    .mat-del-btn { background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.25); color: var(--danger); padding: 7px 10px; border-radius: 7px; font-size: 11px; cursor: pointer; }
+    .mat-add-btn {
+      width: 100%; padding: 12px; border-radius: 10px; border: 1px dashed rgba(0,210,255,0.4);
+      background: rgba(0,210,255,0.05); color: var(--mat-accent); font-size: 13px;
+      font-weight: 700; cursor: pointer; margin-top: 4px; transition: all 0.15s;
+    }
+    .mat-add-btn:active { background: rgba(0,210,255,0.15); }
+    .mat-empty { text-align: center; color: var(--muted); font-size: 12px; padding: 14px 0; }
   </style>
 </head>
 <body>
 
-  <!-- Install Banner (Android/Desktop) -->
+  <!-- Install Banner -->
   <div id="installBanner">
     <div class="banner-inner">
       <div class="banner-icon">📋</div>
@@ -148,16 +148,12 @@
       </div>
     </div>
   </div>
-
-  <!-- iOS Hint Tooltip -->
-  <div id="iosHint">
-    Tap <strong>Share ⎙</strong> then <strong>"Add to Home Screen"</strong>
-  </div>
-
-  <!-- Already-installed indicator -->
+  <div id="iosHint">Tap <strong>Share ⎙</strong> then <strong>"Add to Home Screen"</strong></div>
   <div id="pwaIndicator">✓ INSTALLED</div>
 
   <div class="app">
+
+    <!-- HEADER -->
     <div class="header-v2">
       <div class="brand-bar">
         <span>MC-Daylight Packets</span>
@@ -166,15 +162,14 @@
       <div class="header-content">
         <label class="field-label">COMPANY NAME</label>
         <input type="text" id="companyName" placeholder="Enter Company Name">
-
         <label class="field-label">JOB LOCATION / ID</label>
         <input type="text" id="jobLocation" placeholder="Address or Job Number">
-
         <label class="field-label">DATE OF WORK</label>
         <input type="date" id="workDate">
       </div>
     </div>
 
+    <!-- TODAY'S WORK -->
     <div class="card">
       <h2>TODAY'S WORK</h2>
       <div class="checklist">
@@ -188,6 +183,7 @@
       <textarea id="workNotes" placeholder="Work detail notes…"></textarea>
     </div>
 
+    <!-- ISSUES -->
     <div class="card">
       <h2>ISSUES / DELAYS</h2>
       <div class="checklist">
@@ -199,6 +195,99 @@
       <textarea id="issueDetails" placeholder="Details about issues/delays…"></textarea>
     </div>
 
+    <!-- ══ MATERIALS CARD — collapsible ══ -->
+    <div class="card" id="matCard">
+      <div class="mat-toggle" onclick="toggleMaterials()">
+        <h2 style="color:var(--mat-accent);">MATERIALS</h2>
+        <div class="mat-toggle-right">
+          <span class="mat-badge">CALC</span>
+          <span class="mat-chevron" id="matChevron">▼</span>
+        </div>
+      </div>
+
+      <div class="mat-body" id="matBody">
+
+        <!-- Calc inputs -->
+        <div class="mat-row">
+          <div>
+            <label class="field-label">Material</label>
+            <select id="matType" onchange="matUpdateUI()" style="margin-bottom:8px;">
+              <option value="150">Concrete</option>
+              <option value="110">Sand</option>
+              <option value="145">Asphalt</option>
+              <option value="135">Base Rock</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label">Depth (in)</label>
+            <input type="number" id="matDepth" value="4" oninput="matCalc()" style="margin-bottom:8px;">
+          </div>
+        </div>
+
+        <label class="field-label">Dimensions (ft)</label>
+        <div class="mat-row">
+          <div><input type="number" id="matLength" placeholder="Length" oninput="matCalc()"></div>
+          <div><input type="number" id="matWidth" placeholder="Width" oninput="matCalc()"></div>
+        </div>
+
+        <!-- Live result -->
+        <div class="mat-result-box">
+          <div>
+            <div class="mat-tons" id="matTons">0.00</div>
+            <div class="mat-tons-label">Total Tons</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="mat-yards" id="matYards" style="display:none;"></div>
+            <div style="font-size:10px;color:var(--muted);margin-top:4px;" id="matDensLabel"></div>
+          </div>
+        </div>
+
+        <!-- Bag counts -->
+        <div class="mat-bags" id="matBags">
+          <div class="mat-bag-row"><span id="matBag1Label">80lb Bags</span><strong id="matBag1Val">—</strong></div>
+          <div class="mat-bag-row"><span id="matBag2Label">60lb Bags</span><strong id="matBag2Val">—</strong></div>
+        </div>
+
+        <!-- Density presets -->
+        <label class="field-label" style="margin-top:4px;">Type / Density</label>
+        <div id="matPreset_concrete" class="preset-grid">
+          <button class="preset-btn active" onclick="matSetDensity(150,'Standard Concrete',this)">Standard (150)</button>
+          <button class="preset-btn" onclick="matSetDensity(160,'Reinforced Concrete',this)">Reinforced (160)</button>
+        </div>
+        <div id="matPreset_sand" class="preset-grid" style="display:none;">
+          <button class="preset-btn active" onclick="matSetDensity(110,'Standard Sand',this)">Standard Sand</button>
+          <button class="preset-btn" onclick="matSetDensity(125,'Heavy/Wet Sand',this)">Heavy/Wet (125)</button>
+        </div>
+        <div id="matPreset_asphalt" class="preset-grid" style="display:none;">
+          <button class="preset-btn" onclick="matSetDensity(148,'Asphalt 3/4&quot; Coarse',this)">3/4" Coarse</button>
+          <button class="preset-btn active" onclick="matSetDensity(145,'Asphalt 1/2&quot; Medium',this)">1/2" Medium</button>
+          <button class="preset-btn" onclick="matSetDensity(142,'Asphalt 1/2&quot; Fine',this)">1/2" Fine</button>
+        </div>
+        <div id="matPreset_rock" class="preset-grid" style="display:none;">
+          <button class="preset-btn active" onclick="matSetDensity(140,'Native Base Rock',this)">Native Rock (140)</button>
+          <button class="preset-btn" onclick="matSetDensity(130,'Recycled Base Rock',this)">Recycled (130)</button>
+        </div>
+
+        <input type="hidden" id="matDensity" value="150">
+        <input type="hidden" id="matLabel" value="Standard Concrete">
+
+        <!-- Entry notes -->
+        <label class="field-label" style="margin-top:6px;">Entry Notes (optional)</label>
+        <textarea id="matEntryNotes" rows="2" placeholder="e.g. north alley, patch area…" style="margin-bottom:8px;"></textarea>
+
+        <!-- Add button -->
+        <button class="mat-add-btn" onclick="matAddEntry()">＋ Add to Material Log</button>
+
+        <!-- Log -->
+        <div class="mat-log">
+          <div class="mat-log-title">📋 Material Log <span id="matLogCount" style="color:var(--mat-accent);"></span></div>
+          <div id="matEntries"><div class="mat-empty">No entries yet — calculate and add above</div></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PHOTOS -->
     <div class="card">
       <h2>PHOTOS</h2>
       <input id="photoInput" type="file" accept="image/*" multiple style="display:none" />
@@ -207,14 +296,16 @@
       </div>
     </div>
 
+    <!-- NOTES TO SUPERVISOR -->
     <div class="card">
       <h2>NOTES TO SUPERVISOR</h2>
       <textarea id="supervisorNotes" placeholder="Message to management…"></textarea>
     </div>
 
+    <!-- TIME & AUTH -->
     <div class="card">
       <h2>TIME & AUTHORIZATION</h2>
-      <div style="display:flex; gap:8px; margin-bottom:20px;">
+      <div style="display:flex;gap:8px;margin-bottom:20px;">
         <div style="flex:1"><label class="field-label">Start</label><input type="time" id="startTime"></div>
         <div style="flex:1"><label class="field-label">End</label><input type="time" id="endTime"></div>
         <div style="flex:1"><label class="field-label">Lunch</label><input type="number" id="lunchTime" placeholder="min"></div>
@@ -223,17 +314,15 @@
       <input type="text" id="typedSig" class="signature-font" placeholder="John Doe">
     </div>
 
-    <div style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px; text-align: center;">
-      <a href="https://www.bluecomet.work" target="_blank" style="text-decoration: none; display: block;">
-        <p style="color: var(--muted); font-size: 0.75rem; margin: 0; letter-spacing: 1.5px; text-transform: uppercase;">
-          A <span style="color: var(--accent); font-weight: bold; border-bottom: 1px solid var(--accent);">BLUECOMET.WORK</span> SOLUTION
+    <div style="margin-top:30px;border-top:1px solid var(--border);padding-top:20px;text-align:center;">
+      <a href="https://www.bluecomet.work" target="_blank" style="text-decoration:none;display:block;">
+        <p style="color:var(--muted);font-size:0.75rem;margin:0;letter-spacing:1.5px;text-transform:uppercase;">
+          A <span style="color:var(--accent);font-weight:bold;border-bottom:1px solid var(--accent);">BLUECOMET.WORK</span> SOLUTION
         </p>
       </a>
     </div>
 
-    <div id="statusAlert">
-      <strong>Packet Prepared</strong><br>Use "Share File" to send the document.
-    </div>
+    <div id="statusAlert"><strong>Packet Prepared</strong><br>Use "Share File" to send the document.</div>
     <div id="reportPreview"></div>
   </div>
 
@@ -243,177 +332,329 @@
   </div>
 
   <script>
-    // ── SERVICE WORKER REGISTRATION ──────────────────────────────────────────
+    // ── SERVICE WORKER ───────────────────────────────────────────────────────
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then(reg => console.log('[SW] Registered, scope:', reg.scope))
-          .catch(err => console.warn('[SW] Registration failed:', err));
-      });
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
     }
 
-    // ── PWA INSTALL PROMPT ───────────────────────────────────────────────────
+    // ── PWA INSTALL ──────────────────────────────────────────────────────────
     let deferredPrompt = null;
-    const banner   = document.getElementById('installBanner');
-    const iosHint  = document.getElementById('iosHint');
-    const pwaInd   = document.getElementById('pwaIndicator');
-
-    // Detect if already running as installed PWA
-    const isInstalled = window.matchMedia('(display-mode: standalone)').matches
-                     || window.navigator.standalone === true;
+    const banner  = document.getElementById('installBanner');
+    const iosHint = document.getElementById('iosHint');
+    const pwaInd  = document.getElementById('pwaIndicator');
+    const isInstalled = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
 
     if (isInstalled) {
-      // Already installed — show subtle indicator, skip banners
       pwaInd.style.display = 'block';
       setTimeout(() => { pwaInd.style.opacity = '0'; pwaInd.style.transition = 'opacity 1s'; }, 3000);
     } else {
       const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
       const dismissed = sessionStorage.getItem('installDismissed');
-
       if (isIOS && !dismissed) {
-        // iOS: show tooltip after 3s (no beforeinstallprompt on iOS)
-        setTimeout(() => {
-          iosHint.style.display = 'block';
-          setTimeout(() => { iosHint.style.display = 'none'; }, 7000);
-        }, 3000);
+        setTimeout(() => { iosHint.style.display = 'block'; setTimeout(() => { iosHint.style.display = 'none'; }, 7000); }, 3000);
       }
-
-      // Android / Desktop: capture and show install banner
       window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        if (!dismissed) {
-          banner.style.display = 'block';
-          // Push app content down so banner doesn't cover header
-          document.querySelector('.app').style.paddingTop = '80px';
-        }
+        e.preventDefault(); deferredPrompt = e;
+        if (!dismissed) { banner.style.display = 'block'; document.querySelector('.app').style.paddingTop = '80px'; }
+      });
+    }
+    document.getElementById('btnInstall')?.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      banner.style.display = 'none'; document.querySelector('.app').style.paddingTop = '';
+      deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null;
+    });
+    document.getElementById('btnDismiss')?.addEventListener('click', () => {
+      banner.style.display = 'none'; document.querySelector('.app').style.paddingTop = '';
+      sessionStorage.setItem('installDismissed', '1');
+    });
+    window.addEventListener('appinstalled', () => { banner.style.display = 'none'; deferredPrompt = null; });
+
+    // ── MATERIALS LOGIC ──────────────────────────────────────────────────────
+    let matEntries = [];
+
+    function toggleMaterials() {
+      const body = document.getElementById('matBody');
+      const chev = document.getElementById('matChevron');
+      body.classList.toggle('open');
+      chev.classList.toggle('open');
+      saveData();
+    }
+
+    function matUpdateUI() {
+      const val = document.getElementById('matType').value;
+      ['concrete','sand','asphalt','rock'].forEach(g =>
+        document.getElementById('matPreset_' + g).style.display = 'none'
+      );
+      const map = { '150':'concrete', '110':'sand', '145':'asphalt', '135':'rock' };
+      const key = map[val] || 'concrete';
+      document.getElementById('matPreset_' + key).style.display = 'grid';
+      const firstBtn = document.getElementById('matPreset_' + key).querySelector('.preset-btn.active') ||
+                       document.getElementById('matPreset_' + key).querySelector('.preset-btn');
+      if (firstBtn) { firstBtn.click(); } else { matCalc(); }
+    }
+
+    function matSetDensity(d, label, btn) {
+      document.getElementById('matDensity').value = d;
+      document.getElementById('matLabel').value = label;
+      document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      matCalc();
+    }
+
+    function matCalc() {
+      const L = parseFloat(document.getElementById('matLength').value) || 0;
+      const W = parseFloat(document.getElementById('matWidth').value) || 0;
+      const D = parseFloat(document.getElementById('matDepth').value) || 0;
+      const dens = parseFloat(document.getElementById('matDensity').value) || 150;
+      const matVal = document.getElementById('matType').value;
+
+      const totalLbs = L * W * (D / 12) * dens;
+      const tons = totalLbs / 2000;
+      const yards = (L * W * (D / 12)) / 27;
+
+      document.getElementById('matTons').innerText = tons.toFixed(2);
+      document.getElementById('matDensLabel').innerText = dens + ' lb/ft³';
+
+      const yardsEl = document.getElementById('matYards');
+      const bagsEl  = document.getElementById('matBags');
+
+      if (matVal === '150') {
+        yardsEl.innerText = yards.toFixed(2) + ' cu yd'; yardsEl.style.display = 'block';
+        bagsEl.style.display = 'block';
+        document.getElementById('matBag1Label').innerText = '80lb Bags';
+        document.getElementById('matBag1Val').innerText   = Math.ceil(totalLbs / 80);
+        document.getElementById('matBag2Label').innerText = '60lb Bags';
+        document.getElementById('matBag2Val').innerText   = Math.ceil(totalLbs / 60);
+      } else if (matVal === '110') {
+        yardsEl.style.display = 'none'; bagsEl.style.display = 'block';
+        document.getElementById('matBag1Label').innerText = '100lb Bags';
+        document.getElementById('matBag1Val').innerText   = Math.ceil(totalLbs / 100);
+        document.getElementById('matBag2Label').innerText = '50lb Bags';
+        document.getElementById('matBag2Val').innerText   = Math.ceil(totalLbs / 50);
+      } else {
+        yardsEl.style.display = 'none'; bagsEl.style.display = 'none';
+      }
+    }
+
+    function matAddEntry() {
+      const L = parseFloat(document.getElementById('matLength').value) || 0;
+      const W = parseFloat(document.getElementById('matWidth').value) || 0;
+      const D = parseFloat(document.getElementById('matDepth').value) || 0;
+      if (!L || !W || !D) { alert('Please enter Length, Width, and Depth first.'); return; }
+
+      const dens   = parseFloat(document.getElementById('matDensity').value) || 150;
+      const matVal = document.getElementById('matType').value;
+      const label  = document.getElementById('matLabel').value;
+      const notes  = document.getElementById('matEntryNotes').value.trim();
+
+      const totalLbs = L * W * (D / 12) * dens;
+      const tons  = (totalLbs / 2000).toFixed(2);
+      const yards = ((L * W * (D / 12)) / 27).toFixed(2);
+
+      let bags = '';
+      if (matVal === '150')      bags = `80lb Bags: ${Math.ceil(totalLbs/80)} · 60lb Bags: ${Math.ceil(totalLbs/60)}`;
+      else if (matVal === '110') bags = `100lb Bags: ${Math.ceil(totalLbs/100)} · 50lb Bags: ${Math.ceil(totalLbs/50)}`;
+
+      matEntries.push({
+        id: Date.now(), label, tons,
+        yards: matVal === '150' ? yards : null,
+        dims: `${L}ft × ${W}ft × ${D}in`,
+        bags, notes
+      });
+
+      renderMatLog();
+      saveData();
+
+      // reset calc fields for next entry
+      document.getElementById('matLength').value = '';
+      document.getElementById('matWidth').value  = '';
+      document.getElementById('matEntryNotes').value = '';
+      document.getElementById('matTons').innerText = '0.00';
+      document.getElementById('matYards').style.display = 'none';
+      document.getElementById('matBags').style.display  = 'none';
+    }
+
+    function renderMatLog() {
+      const cont  = document.getElementById('matEntries');
+      const count = document.getElementById('matLogCount');
+      count.innerText = matEntries.length ? `(${matEntries.length})` : '';
+      if (!matEntries.length) {
+        cont.innerHTML = '<div class="mat-empty">No entries yet — calculate and add above</div>';
+        return;
+      }
+      cont.innerHTML = matEntries.map(e => `
+        <div class="mat-entry" id="entry_${e.id}">
+          <div style="font-weight:800;color:var(--mat-accent);margin-bottom:4px;">${e.label}</div>
+          <div>📐 ${e.dims}</div>
+          <div>⚖️ <strong>${e.tons} tons</strong>${e.yards ? ` · ${e.yards} cu yd` : ''}</div>
+          ${e.bags  ? `<div>🛍️ ${e.bags}</div>` : ''}
+          ${e.notes ? `<div style="color:var(--muted);margin-top:3px;">📝 ${e.notes}</div>` : ''}
+          <div class="mat-entry-actions">
+            <button class="mat-copy-btn" id="copybtn_${e.id}" onclick="matCopyEntry(${e.id})">📋 Copy</button>
+            <button class="mat-del-btn" onclick="matDeleteEntry(${e.id})">✕ Remove</button>
+          </div>
+        </div>`).join('');
+    }
+
+    function buildEntryText(e) {
+      let t = `${e.label}\n${e.dims} | ${e.tons} tons`;
+      if (e.yards) t += ` / ${e.yards} cu yd`;
+      if (e.bags)  t += `\n${e.bags}`;
+      if (e.notes) t += `\nNote: ${e.notes}`;
+      return t;
+    }
+
+    function matCopyEntry(id) {
+      const e = matEntries.find(x => x.id === id);
+      if (!e) return;
+      navigator.clipboard.writeText(buildEntryText(e)).then(() => {
+        const btn = document.getElementById('copybtn_' + id);
+        btn.innerText = '✓ Copied!'; btn.classList.add('copied');
+        setTimeout(() => { btn.innerText = '📋 Copy'; btn.classList.remove('copied'); }, 1800);
+      }).catch(() => {
+        // fallback for browsers without clipboard API
+        const ta = document.createElement('textarea');
+        ta.value = buildEntryText(e); document.body.appendChild(ta);
+        ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        const btn = document.getElementById('copybtn_' + id);
+        btn.innerText = '✓ Copied!'; btn.classList.add('copied');
+        setTimeout(() => { btn.innerText = '📋 Copy'; btn.classList.remove('copied'); }, 1800);
       });
     }
 
-    document.getElementById('btnInstall')?.addEventListener('click', async () => {
-      if (!deferredPrompt) return;
-      banner.style.display = 'none';
-      document.querySelector('.app').style.paddingTop = '';
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      console.log('[PWA] Install outcome:', outcome);
-      deferredPrompt = null;
-    });
+    function matDeleteEntry(id) {
+      if (!confirm('Remove this material entry?')) return;
+      matEntries = matEntries.filter(e => e.id !== id);
+      renderMatLog(); saveData();
+    }
 
-    document.getElementById('btnDismiss')?.addEventListener('click', () => {
-      banner.style.display = 'none';
-      document.querySelector('.app').style.paddingTop = '';
-      sessionStorage.setItem('installDismissed', '1');
-    });
+    // ── REPORT: MATERIALS SECTION ────────────────────────────────────────────
+    function buildMatSection() {
+      if (!matEntries.length) return '';
+      const rows = matEntries.map(e => `
+        <tr>
+          <td style="padding:6px 8px;border-bottom:1px solid #eee;">${e.label}</td>
+          <td style="padding:6px 8px;border-bottom:1px solid #eee;">${e.dims}</td>
+          <td style="padding:6px 8px;border-bottom:1px solid #eee;"><strong>${e.tons} tons</strong>${e.yards ? `<br><small style="color:#888;">${e.yards} cu yd</small>` : ''}</td>
+          <td style="padding:6px 8px;border-bottom:1px solid #eee;font-size:11px;color:#555;">${e.bags || '—'}</td>
+          <td style="padding:6px 8px;border-bottom:1px solid #eee;color:#888;font-size:11px;">${e.notes || ''}</td>
+        </tr>`).join('');
+      return `
+        <div style="margin:16px 0;">
+          <strong style="color:#0969da;font-size:13px;text-transform:uppercase;letter-spacing:1px;">Materials Log</strong>
+          <table style="width:100%;border-collapse:collapse;margin-top:8px;font-size:12px;">
+            <thead>
+              <tr style="background:#f0f6ff;">
+                <th style="padding:6px 8px;text-align:left;font-size:10px;color:#555;border-bottom:2px solid #0969da;">Material</th>
+                <th style="padding:6px 8px;text-align:left;font-size:10px;color:#555;border-bottom:2px solid #0969da;">Dimensions</th>
+                <th style="padding:6px 8px;text-align:left;font-size:10px;color:#555;border-bottom:2px solid #0969da;">Quantity</th>
+                <th style="padding:6px 8px;text-align:left;font-size:10px;color:#555;border-bottom:2px solid #0969da;">Bags</th>
+                <th style="padding:6px 8px;text-align:left;font-size:10px;color:#555;border-bottom:2px solid #0969da;">Notes</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+    }
 
-    // Clean up banner once app is installed
-    window.addEventListener('appinstalled', () => {
-      banner.style.display = 'none';
-      document.querySelector('.app').style.paddingTop = '';
-      deferredPrompt = null;
-      console.log('[PWA] App installed!');
-    });
-
-    // ── ORIGINAL APP LOGIC ───────────────────────────────────────────────────
+    // ── PHOTOS ───────────────────────────────────────────────────────────────
     let uploadedPhotos = [];
 
     window.onload = () => {
       const today = new Date().toISOString().split('T')[0];
       document.getElementById('workDate').value = today;
       loadSavedData();
+      matUpdateUI();
     };
-
-    function formatTime(timeStr) {
-      if (!timeStr) return "N/A";
-      const [hh, mm] = timeStr.split(':');
-      const h = parseInt(hh);
-      const ampm = h >= 12 ? 'PM' : 'AM';
-      const h12 = h % 12 || 12;
-      return `${h12}:${mm} ${ampm}`;
-    }
 
     document.getElementById('photoInput').onchange = (e) => {
       Array.from(e.target.files).forEach(file => {
         const reader = new FileReader();
-        reader.onload = (event) => {
-          uploadedPhotos.push(event.target.result);
-          const wrapper = document.createElement('div');
-          wrapper.className = 'photo-box';
-          wrapper.innerHTML = `<img src="${event.target.result}"><button class="remove-photo" onclick="removePhoto('${event.target.result}', this)">✕</button>`;
-          document.getElementById('photoGrid').insertBefore(wrapper, document.getElementById('addPhoto'));
+        reader.onload = (ev) => {
+          uploadedPhotos.push(ev.target.result);
+          const wrap = document.createElement('div'); wrap.className = 'photo-box';
+          wrap.innerHTML = `<img src="${ev.target.result}"><button class="remove-photo" onclick="removePhoto('${ev.target.result}',this)">✕</button>`;
+          document.getElementById('photoGrid').insertBefore(wrap, document.getElementById('addPhoto'));
         };
         reader.readAsDataURL(file);
       });
     };
 
     function removePhoto(src, btn) { uploadedPhotos = uploadedPhotos.filter(p => p !== src); btn.parentElement.remove(); }
+    function formatTime(t) {
+      if (!t) return 'N/A';
+      const [hh,mm] = t.split(':'); const h = parseInt(hh);
+      return `${h%12||12}:${mm} ${h>=12?'PM':'AM'}`;
+    }
+    function clearForm() {
+      if (confirm('Wipe form? This will also clear the materials log.')) {
+        matEntries = [];
+        localStorage.removeItem('mc_daylight_draft');
+        location.reload();
+      }
+    }
 
-    function clearForm() { if(confirm("Wipe form?")) { localStorage.removeItem('mc_daylight_draft'); location.reload(); } }
-
+    // ── GENERATE / SHARE ─────────────────────────────────────────────────────
     function generatePacketHTML() {
-      const company = document.getElementById('companyName').value || "Field Operations";
-      const job     = document.getElementById('jobLocation').value || "Job Report";
+      const company = document.getElementById('companyName').value || 'Field Operations';
+      const job     = document.getElementById('jobLocation').value || 'Job Report';
       const date    = document.getElementById('workDate').value;
       const work    = Array.from(document.querySelectorAll('[data-work]:checked')).map(el => el.parentElement.innerText.trim());
       const issues  = Array.from(document.querySelectorAll('[data-issue]:checked')).map(el => el.parentElement.innerText.trim());
-      const photos  = uploadedPhotos.map(p => `<img src="${p}" style="width:140px; height:140px; object-fit:cover; margin:5px; border-radius:5px; border:1px solid #eee;">`).join('');
+      const photos  = uploadedPhotos.map(p => `<img src="${p}" style="width:140px;height:140px;object-fit:cover;margin:5px;border-radius:5px;border:1px solid #eee;">`).join('');
 
       return `
-        <div id="printArea" style="background:white; padding:10px;">
-          <div style="border-bottom:3px solid #0969da; margin-bottom:15px; padding-bottom:5px;">
-            <h2 style="margin:0; color:#0969da; text-transform:uppercase;">${company}</h2>
-            <p style="margin:0; font-size:12px; color:#555;">MC-Daylight Field Report</p>
+        <div id="printArea" style="background:white;padding:10px;">
+          <div style="border-bottom:3px solid #0969da;margin-bottom:15px;padding-bottom:5px;">
+            <h2 style="margin:0;color:#0969da;text-transform:uppercase;">${company}</h2>
+            <p style="margin:0;font-size:12px;color:#555;">MC-Daylight Field Report</p>
           </div>
           <p><strong>Job Site:</strong> ${job}<br><strong>Date:</strong> ${date}</p>
           <p><strong>Work Performed:</strong> ${work.join(', ') || 'None'}</p>
           <p><strong>Work Notes:</strong> ${document.getElementById('workNotes').value || 'N/A'}</p>
           <p><strong>Issues/Delays:</strong> ${issues.join(', ') || 'None'}</p>
           <p><strong>Issue Details:</strong> ${document.getElementById('issueDetails').value || 'N/A'}</p>
+          ${buildMatSection()}
           <p><strong>Message to Supervisor:</strong> ${document.getElementById('supervisorNotes').value || 'N/A'}</p>
-          <p><strong>Shift Log:</strong> ${formatTime(document.getElementById('startTime').value)} - ${formatTime(document.getElementById('endTime').value)} (${document.getElementById('lunchTime').value || 0}m lunch)</p>
-          <div style="display:flex; flex-wrap:wrap; margin:15px 0;">${photos}</div>
-          <div style="margin-top:20px; border-top:1px solid #333; display:inline-block; padding: 5px 40px 0 0;">
-            <span style="font-family:'Dancing Script', cursive; font-size:28px;">${document.getElementById('typedSig').value || '---'}</span><br>
-            <small style="text-transform:uppercase; color:#888; font-size:10px;">Authorized Signature</small>
+          <p><strong>Shift Log:</strong> ${formatTime(document.getElementById('startTime').value)} – ${formatTime(document.getElementById('endTime').value)} (${document.getElementById('lunchTime').value || 0}m lunch)</p>
+          <div style="display:flex;flex-wrap:wrap;margin:15px 0;">${photos}</div>
+          <div style="margin-top:20px;border-top:1px solid #333;display:inline-block;padding:5px 40px 0 0;">
+            <span style="font-family:'Dancing Script',cursive;font-size:28px;">${document.getElementById('typedSig').value || '---'}</span><br>
+            <small style="text-transform:uppercase;color:#888;font-size:10px;">Authorized Signature</small>
           </div>
-          <div style="text-align:center; font-size:9px; color:#ccc; margin-top:40px;">A BLUECOMET.WORK SOLUTION</div>
+          <div style="text-align:center;font-size:9px;color:#ccc;margin-top:40px;">A BLUECOMET.WORK SOLUTION</div>
         </div>`;
     }
 
     function generatePacket() {
-      const preview  = document.getElementById('reportPreview');
-      const alertBox = document.getElementById('statusAlert');
-      alertBox.style.display = 'block';
-      preview.style.display  = 'block';
+      const preview = document.getElementById('reportPreview');
+      document.getElementById('statusAlert').style.display = 'block';
+      preview.style.display = 'block';
       preview.innerHTML = generatePacketHTML() + `<button class="btn-download" onclick="downloadReport()">💾 Download Official File</button>`;
       preview.scrollIntoView({ behavior: 'smooth' });
     }
 
     function downloadReport() {
-      const job = document.getElementById('jobLocation').value || "Report";
+      const job = document.getElementById('jobLocation').value || 'Report';
       const content = generatePacketHTML();
-      const template = `<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet"><style>body{font-family:sans-serif;padding:40px;max-width:800px;margin:auto;line-height:1.5;color:#222;}img{max-width:100%; border:1px solid #eee;}</style></head><body>${content}</body></html>`;
-      const blob = new Blob([template], { type: 'text/html' });
+      const template = `<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet"><style>body{font-family:sans-serif;padding:40px;max-width:800px;margin:auto;line-height:1.5;color:#222;}img{max-width:100%;border:1px solid #eee;}table{width:100%;border-collapse:collapse;}th,td{padding:6px 8px;text-align:left;}</style></head><body>${content}</body></html>`;
+      const blob = new Blob([template], { type:'text/html' });
       const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `MC_Report_${job.replace(/\s+/g, '_')}.html`;
-      link.click();
+      link.href = URL.createObjectURL(blob); link.download = `MC_Report_${job.replace(/\s+/g,'_')}.html`; link.click();
     }
 
     async function shareAsBlob() {
-      const job = document.getElementById('jobLocation').value || "MC_Report";
+      const job = document.getElementById('jobLocation').value || 'MC_Report';
       const content = generatePacketHTML();
-      const template = `<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet"><style>body{font-family:sans-serif;padding:40px;max-width:800px;margin:auto;line-height:1.5;color:#222;}img{max-width:100%; border:1px solid #eee;}</style></head><body>${content}</body></html>`;
-      const blob = new Blob([template], { type: 'text/html' });
-      const file = new File([blob], `MC_Report_${job.replace(/\s+/g, '_')}.html`, { type: 'text/html' });
-
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: 'Field Report' });
-      } else {
-        downloadReport();
-      }
+      const template = `<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet"><style>body{font-family:sans-serif;padding:40px;max-width:800px;margin:auto;line-height:1.5;color:#222;}img{max-width:100%;border:1px solid #eee;}table{width:100%;border-collapse:collapse;}th,td{padding:6px 8px;text-align:left;}</style></head><body>${content}</body></html>`;
+      const blob = new Blob([template], { type:'text/html' });
+      const file = new File([blob], `MC_Report_${job.replace(/\s+/g,'_')}.html`, { type:'text/html' });
+      if (navigator.canShare && navigator.canShare({ files:[file] })) {
+        await navigator.share({ files:[file], title:'Field Report' });
+      } else { downloadReport(); }
     }
 
+    // ── SAVE / LOAD ──────────────────────────────────────────────────────────
     function saveData() {
       const data = {
         companyName:     document.getElementById('companyName').value,
@@ -426,8 +667,10 @@
         startTime:       document.getElementById('startTime').value,
         endTime:         document.getElementById('endTime').value,
         lunchTime:       document.getElementById('lunchTime').value,
-        wCB: Array.from(document.querySelectorAll('[data-work]')).map(cb => cb.checked),
-        iCB: Array.from(document.querySelectorAll('[data-issue]')).map(cb => cb.checked)
+        wCB:  Array.from(document.querySelectorAll('[data-work]')).map(cb => cb.checked),
+        iCB:  Array.from(document.querySelectorAll('[data-issue]')).map(cb => cb.checked),
+        matEntries,
+        matOpen: document.getElementById('matBody').classList.contains('open')
       };
       localStorage.setItem('mc_daylight_draft', JSON.stringify(data));
     }
@@ -435,24 +678,18 @@
     function loadSavedData() {
       const saved = JSON.parse(localStorage.getItem('mc_daylight_draft'));
       if (!saved) return;
-      document.getElementById('companyName').value     = saved.companyName || '';
-      document.getElementById('jobLocation').value     = saved.jobLocation || '';
-      document.getElementById('workDate').value        = saved.workDate || '';
-      document.getElementById('workNotes').value       = saved.workNotes || '';
-      document.getElementById('issueDetails').value    = saved.issueDetails || '';
-      document.getElementById('supervisorNotes').value = saved.supervisorNotes || '';
-      document.getElementById('typedSig').value        = saved.typedSig || '';
-      document.getElementById('startTime').value       = saved.startTime || '';
-      document.getElementById('endTime').value         = saved.endTime || '';
-      document.getElementById('lunchTime').value       = saved.lunchTime || '';
-      const wCBs = document.querySelectorAll('[data-work]');
-      saved.wCB?.forEach((c, i) => { if(wCBs[i]) wCBs[i].checked = c; });
-      const iCBs = document.querySelectorAll('[data-issue]');
-      saved.iCB?.forEach((c, i) => { if(iCBs[i]) iCBs[i].checked = c; });
+      ['companyName','jobLocation','workDate','workNotes','issueDetails','supervisorNotes','typedSig','startTime','endTime','lunchTime']
+        .forEach(id => { if (saved[id] !== undefined) document.getElementById(id).value = saved[id]; });
+      saved.wCB?.forEach((c,i) => { const el = document.querySelectorAll('[data-work]')[i]; if(el) el.checked = c; });
+      saved.iCB?.forEach((c,i) => { const el = document.querySelectorAll('[data-issue]')[i]; if(el) el.checked = c; });
+      if (saved.matEntries?.length) { matEntries = saved.matEntries; renderMatLog(); }
+      if (saved.matOpen) {
+        document.getElementById('matBody').classList.add('open');
+        document.getElementById('matChevron').classList.add('open');
+      }
     }
 
     document.addEventListener('input', saveData);
   </script>
 </body>
 </html>
-
